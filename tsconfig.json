@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "CommonJS",
+    "sourceMap": true,
+    "rootDir": "./src",
+    "outDir": "./static"
+  }
+}
