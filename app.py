@@ -8,7 +8,7 @@ ic.configureOutput(prefix=f'----- | ', includeContext=True)
 
 app = Flask(__name__)
 
-################ rendering index page
+################ rendering pages
 
 @app.route('/')
 def index():
@@ -30,7 +30,7 @@ def show_create_destination():
         print(ex, flush = True)
         return "ups ..."
 
-##############################
+############################## SIGN UP
 @app.post("/signup")
 def signup_post():
     try:
@@ -55,7 +55,7 @@ def signup_post():
         if "db" in locals(): db.close()
 
 
-##############################
+############################## CHECK USERNAME
 @app.post("/api-check-username")
 def check_username():
     try:
@@ -92,7 +92,7 @@ def check_username():
         if "db" in locals(): db.close()  
 
 
-##############################
+############################## CREATE USER
 @app.post("/api-create-user")
 def create_user():
     try:
@@ -132,3 +132,7 @@ def create_user():
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()  
+
+
+############ CREATE DESTINATION
+

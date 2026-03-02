@@ -3,11 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/app.css">
+
     <title>Sign Up</title>
 </head>
 <body>
     
-    <h1>Create</h1>
+    <h1>User Name: Test</h1>
+    <div class="create_container">
+    <form action="/create_destination" method="post">
+
+    <input name="travel_title" type="text" placeholder="Title" >
+    <input name="travel_description" type="text" placeholder="Description" >
+    <input name="travel_location" type="text" placeholder="Location" >
+    <input name="travel_country" type="text" placeholder="Country" >
+    
+    <button>
+        Sign Up
+    </button>
+
+    </form>
+    </div>
 
 </body>
 </html>
