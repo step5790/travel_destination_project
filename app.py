@@ -109,8 +109,7 @@ def create_user():
         return f"""
         <browser mix-update="#tooltip">{tip}</browser>
         """
-        
-
+    
     except Exception as ex:
         # print(ex, flush = True)
         ic(ex)
