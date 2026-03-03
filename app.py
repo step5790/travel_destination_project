@@ -9,7 +9,6 @@ ic.configureOutput(prefix=f'----- | ', includeContext=True)
 app = Flask(__name__)
 
 ################ rendering pages
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -30,30 +29,32 @@ def show_create_destination():
         print(ex, flush = True)
         return "ups ..."
 
-############################## SIGN UP
-@app.post("/signup")
-def signup_post():
+
+#################### LOG IN ROUTE
+@app.post('/login')
+def login():
     try:
-        user_password = x.validate_user_password()
-        user_username = x.validate_user_username()
-        user_pk = uuid.uuid4().hex
+        user_username = request.form.get('user_username')
+        user_password = request.form.get('user_password')
         db, cursor = x.db()
-        q = "INSERT INTO users VALUES(%s, %s, %s, %s)"        
-        cursor.execute(q, (user_pk, user_username, user_password))
-        db.commit()
-        return "ok"
+        q = "SELECT * FROM users WHERE user_username = %s AND user_password = %s;"
+        cursor.execute(q, (user_username, user_password))
+        
+        # fetching the very first result in sql 
+        row = cursor.fetchone()
+        
+        if row:
+            return render_template('page_create_destination.html', username=user_username)
+        else:
+            return render_template('index.html', error_msg="Invalid username or password")
+        return "Invalid username or password"
+
     except Exception as ex:
-
-        # How do you check if it is a number
-        if "Duplicate entry" in str(ex) and "user_username" in str(ex):
-            return "username already in the system", 400
-
-        return ex.args[0], ex.args[1]
+        return "Internal server error", 500
 
     finally:
         if "cursor" in locals(): cursor.close()
-        if "db" in locals(): db.close()
-
+        if "db" in locals(): db.close() 
 
 ############################## CHECK USERNAME
 @app.post("/api-check-username")
@@ -90,6 +91,31 @@ def check_username():
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()  
+
+
+############################## SIGN UP
+@app.post("/signup")
+def signup_post():
+    try:
+        user_password = x.validate_user_password()
+        user_username = x.validate_user_username()
+        user_pk = uuid.uuid4().hex
+        db, cursor = x.db()
+        q = "INSERT INTO users VALUES(%s, %s, %s)"        
+        cursor.execute(q, (user_pk, user_username, user_password))
+        db.commit()
+        return "ok"
+    except Exception as ex:
+
+        # How do you check if it is a number
+        if "Duplicate entry" in str(ex) and "user_username" in str(ex):
+            return "username already in the system", 400
+
+        return ex.args[0], ex.args[1]
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
 
 
 ############################## CREATE USER

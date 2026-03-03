@@ -5,12 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travel Destination</title>
     <script src="/static/app.js" defer></script>
+    <link rel="stylesheet" href="/static/app.css">
 
 </head>
 <body>
     
-    <Button id="signUpBtn">Sign up</Button>
-    <Button id="logInBtn">Log in</Button>
+    <div class="index_container">
+
+    <form action="/login" method="POST">
+        <h2>Login</h2>
+        <div>
+            <label>Username:</label><br>
+            <input type="text" name="user_username" required>
+        </div>
+        <div>
+            <label>Password:</label><br>
+            <input type="password" name="user_password" required>
+        </div>
+        <Button class="button-group" id="logInBtn" type="submit">Login</button>
+    </form>
+
+    <Button class="button-group" id="signUpBtn">Sign up</Button>
+    </div>
 
 </body>
 
