@@ -182,10 +182,13 @@ def create_destination():
         travel_description = request.form.get('travel_description')
         travel_location = request.form.get('travel_location')
         travel_country = request.form.get('travel_country')
+
+        travel_from_date = request.form.get('travel_from_date')
+        travel_to_date = request.form.get('travel_to_date')
       
         db, cursor = x.db()
-        q = "INSERT INTO travel (travel_id, fk_user_id, travel_title, travel_description, travel_location, travel_country) VALUES (%s, %s, %s, %s, %s, %s)"
-        cursor.execute(q, (travel_id, current_user_id, travel_title, travel_description, travel_location, travel_country))
+        q = "INSERT INTO travel (travel_id, fk_user_id, travel_title, travel_description, travel_location, travel_country, travel_from_date, travel_to_date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(q, (travel_id, current_user_id, travel_title, travel_description, travel_location, travel_country, travel_from_date, travel_to_date))
         db.commit()
 
         return render_template("page_create_destination.html")
