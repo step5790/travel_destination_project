@@ -11,7 +11,7 @@ app = Flask(__name__)
 ################ rendering pages
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', error=None)
 
 @app.get("/signup")
 def show_signup():
@@ -46,9 +46,8 @@ def login():
         if row:
             return render_template('page_create_destination.html', username=user_username)
         else:
-            return render_template('index.html', error_msg="Invalid username or password")
-        return "Invalid username or password"
-
+            return render_template('index.html', error="Invalid username or password")
+       
     except Exception as ex:
         return "Internal server error", 500
 

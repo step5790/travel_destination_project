@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travel Destination</title>
-    <script src="/static/app.js" defer></script>
-    <link rel="stylesheet" href="/static/app.css">
+{% include "_header.html" %}
 
-</head>
-<body>
-    
-    <div class="index_container">
+<div class="index_container">
 
     <form action="/login" method="POST">
         <h2>Login</h2>
@@ -18,17 +8,22 @@
             <label>Username:</label><br>
             <input type="text" name="user_username" required>
         </div>
+
         <div>
             <label>Password:</label><br>
             <input type="password" name="user_password" required>
         </div>
         <Button class="button-group" id="logInBtn" type="submit">Login</button>
+
     </form>
 
     <Button class="button-group" id="signUpBtn">Sign up</Button>
-    </div>
 
-</body>
+    {% if error %}
+    <br><span style="color: red;">{{ error }}</span>
+    {% endif %}
+</div>
 
-  
+
+
 </html>
