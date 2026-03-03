@@ -133,3 +133,12 @@ button {
     padding: 0 20px;
     z-index: 1000;    
 }
+
+.travel-input {
+  width: 100%;
+  height: 100px;
+  padding: 12px;
+  font-size: 16px;
+  box-sizing: border-box; 
+  vertical-align: top; 
+}
