@@ -175,20 +175,20 @@ def create_user():
 @app.post("/create_destination_login")
 def create_destination():
     try:
-        travel_id = uuid.uuid4().hex
-        user_id = user_id
+        current_user_id = session.get('user_id')
+
         travel_title = request.form.get('travel_title')
-        user_username = user_username
+        travel_id = uuid.uuid4().hex
       
         db, cursor = x.db()
-        q = "INSERT INTO travel (travel_id, fk_user_id, travel_title) SELECT %s, %s, %s FROM users WHERE user_username = %s LIMIT 1;"
-        cursor.execute(q, (travel_id, user_id, travel_title, user_username ))
+        q = "INSERT INTO travel (travel_id, fk_user_id, travel_title) VALUES (%s, %s, %s)"
+        cursor.execute(q, (travel_id, current_user_id, travel_title))
         db.commit()
 
         return render_template("page_create_destination.html")
 
     except Exception as ex:
-        return "Internal server error", 500
+        return "Internal server error -create destination", 500
 
     finally:
         if "cursor" in locals(): cursor.close()
