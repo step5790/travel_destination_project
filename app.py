@@ -176,6 +176,7 @@ def create_user():
 def create_destination():
     try:
         current_user_id = session.get('user_id')
+        current_username = session.get('user_username') # Get the name here!
 
         travel_title = request.form.get('travel_title')
         travel_id = uuid.uuid4().hex
@@ -191,7 +192,7 @@ def create_destination():
         cursor.execute(q, (travel_id, current_user_id, travel_title, travel_description, travel_location, travel_country, travel_from_date, travel_to_date))
         db.commit()
 
-        return render_template("page_create_destination.html")
+        return render_template("page_create_destination.html", username=current_username)
 
     except Exception as ex:
         return "Internal server error -create destination", 500
