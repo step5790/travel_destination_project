@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session # adding session to store tag variable for other post request
 import x
 import uuid
 import time
@@ -7,6 +7,7 @@ from icecream import ic
 ic.configureOutput(prefix=f'----- | ', includeContext=True)
 
 app = Flask(__name__)
+app.secret_key = 'any_secret_string_here' # This is required!
 
 ################ rendering pages
 @app.route('/')
@@ -37,18 +38,30 @@ def login():
         user_username = request.form.get('user_username')
         user_password = request.form.get('user_password')
         db, cursor = x.db()
-        q = "SELECT * FROM users WHERE user_username = %s AND user_password = %s;"
+        # q = "SELECT * FROM users WHERE user_username = %s AND user_password = %s;"
+        q = "SELECT user_id, user_username FROM users WHERE user_username = %s AND user_password = %s"
         cursor.execute(q, (user_username, user_password))
         
         # fetching the very first result in sql 
         row = cursor.fetchone()
         
+        print("DATABASE RESULT:", row, flush=True)
+
         if row:
-            return render_template('page_create_destination.html', username=user_username)
+            # print return dictionary/object {} using keys instead of row[0]
+            current_id = row['user_id']
+            # save to session for next post request
+            session['user_id'] = row['user_id']
+
+            current_username = row['user_username']
+            return render_template('page_create_destination.html', 
+                                   username=current_username, 
+                                   user_id=current_id)
         else:
             return render_template('index.html', error="Invalid username or password")
        
     except Exception as ex:
+        print(f"Error: {ex}")
         return "Internal server error", 500
 
     finally:
@@ -159,4 +172,24 @@ def create_user():
 
 
 ############ CREATE DESTINATION
+@app.post("/create_destination_login")
+def create_destination():
+    try:
+        travel_id = uuid.uuid4().hex
+        user_id = user_id
+        travel_title = request.form.get('travel_title')
+        user_username = user_username
+      
+        db, cursor = x.db()
+        q = "INSERT INTO travel (travel_id, fk_user_id, travel_title) SELECT %s, %s, %s FROM users WHERE user_username = %s LIMIT 1;"
+        cursor.execute(q, (travel_id, user_id, travel_title, user_username ))
+        db.commit()
 
+        return render_template("page_create_destination.html")
+
+    except Exception as ex:
+        return "Internal server error", 500
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()  
