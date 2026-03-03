@@ -31,7 +31,7 @@ def show_create_destination():
 
 
 #################### LOG IN ROUTE
-@app.post('/login')
+@app.post('/create_destination')
 def login():
     try:
         user_username = request.form.get('user_username')
