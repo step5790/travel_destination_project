@@ -180,10 +180,12 @@ def create_destination():
         travel_title = request.form.get('travel_title')
         travel_id = uuid.uuid4().hex
         travel_description = request.form.get('travel_description')
+        travel_location = request.form.get('travel_location')
+        travel_country = request.form.get('travel_country')
       
         db, cursor = x.db()
-        q = "INSERT INTO travel (travel_id, fk_user_id, travel_title, travel_description) VALUES (%s, %s, %s, %s)"
-        cursor.execute(q, (travel_id, current_user_id, travel_title, travel_description))
+        q = "INSERT INTO travel (travel_id, fk_user_id, travel_title, travel_description, travel_location, travel_country) VALUES (%s, %s, %s, %s, %s, %s)"
+        cursor.execute(q, (travel_id, current_user_id, travel_title, travel_description, travel_location, travel_country))
         db.commit()
 
         return render_template("page_create_destination.html")
