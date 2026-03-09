@@ -1,15 +1,11 @@
-<div id="travel-{{ travel.travel_id }}" class="travel" mix-fade-3000>
-    
+<div id="travel-{{ travel.travel_id }}" class="travel">
     <form>
         <input name="travel_title" type="text" value="{{ travel.travel_title }}">
 
-        <button mix-delete="/travels/{{ travel.travel_id }}">
+        <button type="button" onclick="deleteTravel('{{ travel.travel_id }}')">
             Delete
         </button>
       
-        <button>
-            Update
-        </button>
+        <button type="button">Update</button>
     </form>
-
 </div>

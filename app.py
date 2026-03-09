@@ -234,3 +234,22 @@ def create_destination():
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()  
+
+########################### DELETE
+@app.delete("/travels/<travel_id>")
+def delete_travel(travel_id):
+    try:
+        db, cursor = x.db()
+        q = "DELETE FROM travel WHERE travel_id = %s"
+        cursor.execute(q, (travel_id,))
+        db.commit()
+
+        # Return a 200 OK status to the JavaScript
+        return {"info": "deleted"}, 200
+        
+    except Exception as ex:
+        print(f"Database error: {ex}")
+        return {"info": "error"}, 500
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
