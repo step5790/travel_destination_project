@@ -25,7 +25,11 @@ def show_signup():
 @app.get("/create_destination")
 def show_create_destination():
     try:
-        return render_template("page_create_destination.html")
+        if 'user_id' not in session:
+            return redirect('/') # Redirect to login if not logged in
+    
+    # Pull data from session to pass to the template
+        return render_template('page_create_destination.html', username=session.get('current_username'), user_id=session.get('user_id'))
     except Exception as ex:
         print(ex, flush = True)
         return "ups ..."
@@ -54,6 +58,7 @@ def login():
             session['user_id'] = row['user_id']
 
             current_username = row['user_username']
+            session['current_username']
             return render_template('page_create_destination.html', 
                                    username=current_username, 
                                    user_id=current_id)

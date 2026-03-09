@@ -4,6 +4,7 @@
     
     <h1 id="create-destination-page" data-username="{{ user_username }}">Ready to travel {{ username }} ?</h1>
     <div class="create_container">
+        
     <form action="/create_destination_login" method="post">
 
     <input name="travel_title" type="text" placeholder="Title" >
@@ -21,6 +22,10 @@
 
     </form>
     </div>
+
+    {% for user in users %}
+        {% include "___destination.html" %}
+    {% endfor %}
 
 </body>
 
