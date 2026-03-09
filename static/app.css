@@ -142,3 +142,13 @@ button {
   box-sizing: border-box; 
   vertical-align: top; 
 }
+
+#travels {
+    display: flex;
+    flex-wrap:wrap ;
+    .travel {
+        display: flex;
+        align-items: center;
+        margin: 1rem;
+    }
+}

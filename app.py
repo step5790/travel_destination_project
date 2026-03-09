@@ -22,21 +22,39 @@ def show_signup():
         print(ex, flush = True)
         return "ups ..."
 
+############################ CREATE DESTINATION
 @app.get("/create_destination")
 def show_create_destination():
-    try:
-        if 'user_id' not in session:
-            return redirect('/') # Redirect to login if not logged in
-    
-    # Pull data from session to pass to the template
-        return render_template('page_create_destination.html', username=session.get('current_username'), user_id=session.get('user_id'))
-    except Exception as ex:
-        print(ex, flush = True)
-        return "ups ..."
+    # 1. Security Check
+    if 'user_id' not in session:
+        return redirect('/')
 
+    db, cursor = None, None
+    try:
+        # 2. Database Logic
+        db, cursor = x.db()
+        q = "SELECT * FROM travel"
+        cursor.execute(q)
+        travels = cursor.fetchall()
+
+        # 3. Render Template with all variables
+        return render_template(
+            "page_create_destination.html", 
+            username=session.get('current_username'), 
+            user_id=session.get('user_id'),
+            travels=travels
+        )
+
+    except Exception as ex:
+        print(f"Error: {ex}", flush=True)
+        return "System under maintenance...", 500
+        
+    finally:
+        if cursor: cursor.close()
+        if db: db.close()
 
 #################### LOG IN ROUTE
-@app.post('/create_destination')
+@app.post("/create_destination")
 def login():
     try:
         user_username = request.form.get('user_username')
@@ -196,9 +214,20 @@ def create_destination():
         q = "INSERT INTO travel (travel_id, fk_user_id, travel_title, travel_description, travel_location, travel_country, travel_from_date, travel_to_date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
         cursor.execute(q, (travel_id, current_user_id, travel_title, travel_description, travel_location, travel_country, travel_from_date, travel_to_date))
         db.commit()
-        ic(current_username)
-        return render_template("page_create_destination.html", username=current_username)
 
+         # Don't use cursor.fetchone(), use the variables from earlier in the function
+        travel = {
+            "travel_title": travel_title,
+           
+        }
+
+        travel_html = render_template("___destination.html", travel=travel)
+
+        return f"""
+            <browser mix-after-begin="#travels">
+                {travel_html}
+            </browser>
+        """
     except Exception as ex:
         return "Internal server error -create destination", 500
 

@@ -1,9 +1,9 @@
 <div id="travel-{{ travel.travel_id }}" class="travel" mix-fade-3000>
     
     <form>
-        <input name="user_username" type="text" value="{{ travel.travel_id }}">
+        <input name="travel_title" type="text" value="{{ travel.travel_title }}">
 
-        <button mix-delete="/users/{{ user.user_pk }}">
+        <button mix-delete="/travels/{{ travel.travel_id }}">
             Delete
         </button>
       
