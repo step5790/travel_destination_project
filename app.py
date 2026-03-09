@@ -30,18 +30,23 @@ def show_create_destination():
         return redirect('/')
 
     db, cursor = None, None
+    
+    ic(session.get('user_username'))
+
     try:
         # 2. Database Logic
+        current_user_id = session.get('user_id') # Get the logged-in ID
         db, cursor = x.db()
-        q = "SELECT * FROM travel"
-        cursor.execute(q)
+
+        q = "SELECT * FROM travel WHERE fk_user_id = %s"
+        cursor.execute(q, (current_user_id,))
         travels = cursor.fetchall()
 
         # 3. Render Template with all variables
         return render_template(
             "page_create_destination.html", 
-            username=session.get('current_username'), 
-            user_id=session.get('user_id'),
+            username=session.get('user_username'), 
+            user_id=current_user_id,
             travels=travels
         )
 
@@ -54,7 +59,7 @@ def show_create_destination():
         if db: db.close()
 
 #################### LOG IN ROUTE
-@app.post('/create_destination')
+@app.post("/create_destination")
 def login():
     try:
         user_username = request.form.get('user_username')
@@ -72,14 +77,12 @@ def login():
         if row:
             # print return dictionary/object {} using keys instead of row[0]
             current_id = row['user_id']
-            # save to session for next post request
             session['user_id'] = row['user_id']
 
             current_username = row['user_username']
-            session['current_username']
-            return render_template('page_create_destination.html', 
-                                   username=current_username, 
-                                   user_id=current_id)
+            session['user_username'] = row['user_username']
+
+            return redirect('/create_destination')
         else:
             return render_template('index.html', error="Invalid username or password")
        
