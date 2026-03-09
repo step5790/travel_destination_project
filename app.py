@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session # adding session to store tag variable for other post request
+from flask import Flask, render_template, request, jsonify, session, redirect # adding session to store tag variable for other post request
 import x
 import uuid
 import time
@@ -54,7 +54,7 @@ def show_create_destination():
         if db: db.close()
 
 #################### LOG IN ROUTE
-@app.post("/create_destination")
+@app.post('/create_destination')
 def login():
     try:
         user_username = request.form.get('user_username')
@@ -223,11 +223,8 @@ def create_destination():
 
         travel_html = render_template("___destination.html", travel=travel)
 
-        return f"""
-            <browser mix-after-begin="#travels">
-                {travel_html}
-            </browser>
-        """
+        return redirect("/create_destination")
+
     except Exception as ex:
         return "Internal server error -create destination", 500
 
