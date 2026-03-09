@@ -181,7 +181,7 @@ def create_user():
 def create_destination():
     try:
         current_user_id = session.get('user_id')
-        current_username = session.get('user_username') # Get the name here!
+        current_username = session.get('current_username') # Get the name here!
 
         travel_title = request.form.get('travel_title')
         travel_id = uuid.uuid4().hex
@@ -196,7 +196,7 @@ def create_destination():
         q = "INSERT INTO travel (travel_id, fk_user_id, travel_title, travel_description, travel_location, travel_country, travel_from_date, travel_to_date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
         cursor.execute(q, (travel_id, current_user_id, travel_title, travel_description, travel_location, travel_country, travel_from_date, travel_to_date))
         db.commit()
-
+        ic(current_username)
         return render_template("page_create_destination.html", username=current_username)
 
     except Exception as ex:
