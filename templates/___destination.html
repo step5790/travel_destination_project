@@ -1,12 +1,25 @@
 <div id="travel-{{ travel.travel_id }}" class="travel">
     <form>
+        <p>Title:</p>
         <input name="travel_title" type="text" value="{{ travel.travel_title }}">
+        <p>Description:</p>
+        <textarea name="travel_description" class="travel-input" type="text">{{ travel.travel_description }}</textarea>
+        <p>Location:</p>
+        <input name="travel_location" type="text" value="{{ travel.travel_location }}">
+        <p>Country:</p>
+        <input name="travel_country" type="text" value="{{ travel.travel_country }}">
+
+        <label for="start_date">Select a start date:</label>
+        <input type="date" id="travel_from_date" name="travel_from_date" value="{{ travel.travel_from_date }}">
+
+        <label for="end_date">Select a end date:</label>
+        <input type="date" id="travel_to_date" name="travel_to_date" value="{{ travel.travel_to_date }}">
 
         <button type="button" onclick="deleteTravel('{{ travel.travel_id }}')">
             Delete
         </button>
       
-        <button type="button" onclick="updateTravel('{{ travel.travel_id }}')">
+        <button type="button" onclick="updateTravel(event,'{{ travel.travel_id }}')">
             Update
         </button>
         </form>

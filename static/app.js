@@ -34,30 +34,38 @@ async function deleteTravel(travelId) {
     }
 }
 
-async function updateTravel(travel_id) {
-    // 1. Find the button that was clicked
-    const btn = event.target;
-    // 2. Find the input field named 'travel_title' inside the same form
-    const input = btn.closest('form').querySelector('input[name="travel_title"]');
-    const newTitle = input.value;
+// 1. Add 'ev' (or 'event') to the parameters
+async function updateTravel(ev, travel_id) {
+    // 2. Use ev.target instead of just 'event.target'
+    const btn = ev.target;
+    const form = btn.closest('form');
+    
+    // Now 'form' will be correctly defined
+    const titleInput = form.querySelector('input[name="travel_title"]');
+    const descInput = form.querySelector('textarea[name="travel_description"]');
+    
+    const newTitle = titleInput.value;
+    const newDescription = descInput.value;
 
     try {
         const response = await fetch(`/travels/${travel_id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "travel_title": newTitle })
+            body: JSON.stringify({ 
+                "travel_title": newTitle,
+                "travel_description": newDescription 
+            })
         });
 
         if (response.ok) {
-            const data = await response.json();
-            console.log("Success:", data);
-            // Visual feedback: briefly highlight the input green
-            input.style.backgroundColor = "#d4edda";
-            setTimeout(() => input.style.backgroundColor = "white", 1000);
-        } else {
-            alert("Update failed on server.");
+            console.log("Updated!");
+            // Success feedback
+            [titleInput, descInput].forEach(el => {
+                el.style.backgroundColor = "#d4edda";
+                setTimeout(() => el.style.backgroundColor = "white", 1000);
+            });
         }
-    } catch (ex) {
-        console.error("External error:", ex);
+    } catch (err) {
+        console.error("Update failed:", err);
     }
 }

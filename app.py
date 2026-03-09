@@ -263,14 +263,20 @@ def update_travel(travel_id):
         # Get the JSON data from the fetch body
         data = request.get_json()
         new_title = data.get("travel_title")
+        new_description = data.get("travel_description") 
 
         if not new_title:
             return {"info": "Title is required"}, 400
 
         db, cursor = x.db()
         # SQL Update
-        q = "UPDATE travel SET travel_title = %s WHERE travel_id = %s"
-        cursor.execute(q, (new_title, travel_id))
+        q = """
+            UPDATE travel 
+            SET travel_title = %s, 
+                travel_description = %s 
+            WHERE travel_id = %s
+        """
+        cursor.execute(q, (new_title, new_description, travel_id,))
         
         # Don't forget to commit!
         db.commit()
