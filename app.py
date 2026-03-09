@@ -256,6 +256,38 @@ def delete_travel(travel_id):
         if "db" in locals(): db.close()
 
 ######################### UPDATE
+@app.put("/travels/<travel_id>")
+def update_travel(travel_id):
+    db, cursor = None, None
+    try:
+        # Get the JSON data from the fetch body
+        data = request.get_json()
+        new_title = data.get("travel_title")
+
+        if not new_title:
+            return {"info": "Title is required"}, 400
+
+        db, cursor = x.db()
+        # SQL Update
+        q = "UPDATE travel SET travel_title = %s WHERE travel_id = %s"
+        cursor.execute(q, (new_title, travel_id))
+        
+        # Don't forget to commit!
+        db.commit()
+
+        if cursor.rowcount == 0:
+            return {"info": "No travel found to update"}, 404
+
+        return {"info": "success", "updated_title": new_title}, 200
+
+    except Exception as ex:
+        ic(ex)
+        return {"info": "system error"}, 500
+    finally:
+        if cursor: cursor.close()
+        if db: db.close()
+
+######################### LOGOUT
 @app.get("/logout")
 def logout():
     try:

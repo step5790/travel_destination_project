@@ -33,3 +33,31 @@ async function deleteTravel(travelId) {
         console.error("Error:", error);
     }
 }
+
+async function updateTravel(travel_id) {
+    // 1. Find the button that was clicked
+    const btn = event.target;
+    // 2. Find the input field named 'travel_title' inside the same form
+    const input = btn.closest('form').querySelector('input[name="travel_title"]');
+    const newTitle = input.value;
+
+    try {
+        const response = await fetch(`/travels/${travel_id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "travel_title": newTitle })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("Success:", data);
+            // Visual feedback: briefly highlight the input green
+            input.style.backgroundColor = "#d4edda";
+            setTimeout(() => input.style.backgroundColor = "white", 1000);
+        } else {
+            alert("Update failed on server.");
+        }
+    } catch (ex) {
+        console.error("External error:", ex);
+    }
+}
