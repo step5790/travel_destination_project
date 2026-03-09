@@ -45,11 +45,15 @@ async function updateTravel(ev, travel_id) {
     const descInput = form.querySelector('textarea[name="travel_description"]');
     const travelInput = form.querySelector('input[name="travel_location"]')
     const countryInput = form.querySelector('input[name="travel_country"]')
+    const fromInput = form.querySelector('input[name="travel_from_date"]')
+    const toInput = form.querySelector('input[name="travel_to_date"]')
 
     const newTitle = titleInput.value;
     const newDescription = descInput.value;
     const newLocation = travelInput.value;
     const newCountry = countryInput.value;
+    const newFromDate = fromInput.value;
+    const newToDate = toInput.value;
 
     try {
         const response = await fetch(`/travels/${travel_id}`, {
@@ -59,14 +63,16 @@ async function updateTravel(ev, travel_id) {
                 "travel_title": newTitle,
                 "travel_description": newDescription ,
                 "travel_location": newLocation,
-                "travel_country": newCountry
+                "travel_country": newCountry,
+                "travel_from_date": newFromDate,
+                "travel_to_date": newToDate
             })
         });
 
         if (response.ok) {
             console.log("Updated!");
             // Success feedback all input
-            [titleInput, descInput, travelInput, countryInput].forEach(el => {
+            [titleInput, descInput, travelInput, countryInput, fromInput, toInput].forEach(el => {
                 el.style.backgroundColor = "#d4edda";
                 setTimeout(() => el.style.backgroundColor = "white", 1000);
             });
