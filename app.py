@@ -265,6 +265,7 @@ def update_travel(travel_id):
         new_title = data.get("travel_title")
         new_description = data.get("travel_description") 
         new_location = data.get("travel_location")
+        new_country = data.get("travel_country")
 
         if not new_title:
             return {"info": "Title is required"}, 400
@@ -275,10 +276,11 @@ def update_travel(travel_id):
             UPDATE travel 
             SET travel_title = %s, 
                 travel_description = %s,
-                travel_location = %s 
+                travel_location = %s,
+                travel_country = %s 
             WHERE travel_id = %s
         """
-        cursor.execute(q, (new_title, new_description, new_location, travel_id,))
+        cursor.execute(q, (new_title, new_description, new_location, new_country, travel_id,))
         
         # Don't forget to commit!
         db.commit()
