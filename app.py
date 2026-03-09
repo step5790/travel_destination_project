@@ -12,6 +12,7 @@ app.secret_key = 'any_secret_string_here' # This is required!
 ################ rendering pages
 @app.route('/')
 def index():
+    session.clear()
     return render_template('index.html', error=None)
 
 @app.get("/signup")
@@ -253,3 +254,13 @@ def delete_travel(travel_id):
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
+
+######################### UPDATE
+@app.get("/logout")
+def logout():
+    try:
+        session.clear()
+        return redirect("/")
+    except Exception as ex:
+        ic(ex)
+        return "ups"     
